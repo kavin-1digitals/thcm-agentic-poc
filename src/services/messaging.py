@@ -45,5 +45,11 @@ async def run_graph(thread_id, data, cache):
         msg = (field_value.get("options") or "") +'\n'+ (field_value.get("prompt") or "")
         await send_msg(msg, f"whatsapp:+{thread_id}")
     else:
-        msg = result['messages'][-1] + '\n' + result['messages'][-2]
+        messages = result.get('messages', [])
+        if len(messages) >= 2:
+            msg = messages[-1] + '\n' + messages[-2]
+        elif len(messages) == 1:
+            msg = messages[-1]
+        else:
+            msg = "I'm sorry, I couldn't process your request. Please try again."
         await send_msg(msg, f"whatsapp:+{thread_id}")
